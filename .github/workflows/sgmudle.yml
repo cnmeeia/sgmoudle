@@ -1,0 +1,32 @@
+name: do
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+        
+      - name: python
+        run: |      
+          sudo apt-get update         
+          sudo apt-get install python3 -y          
+          
+      - name: git push
+        run: |       
+          git remote set-url origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}          
+          git pull --rebase 
+          
+          
+      - name: run python
+        run: |
+          python3 s.py
+          
+      - name: git push
+        run: |        
+          git config --global user.email github@app2022.ml        
+          git config --global user.name cnmeeia        
+          git pull         
+          git add .         
+          git commit -m "push"
+          git push
